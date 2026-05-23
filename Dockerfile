@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libgbm1 \
     libgtk-3-0 \
     wget \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
@@ -23,7 +24,7 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
 WORKDIR /app
 
 # Install deps first (better layer caching)
-COPY package.json yarn.lock* package-lock.json* ./
+COPY package.json yarn.lock* package-lock.json* patch-wwebjs.js ./
 RUN if [ -f package-lock.json ]; then npm ci --omit=dev; else npm install --omit=dev; fi
 
 # App code
